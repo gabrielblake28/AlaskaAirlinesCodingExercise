@@ -67,7 +67,7 @@ export class SeatReservations {
   }
 
   public CalculateAvailability(reservedSeats: string) {
-    let fourFamilyAvailability = 0;
+    let familyAvailability = 0;
 
     // construct the seating layout accounting for reserved seats and aisles
     const seatingLayout = this.addReservedSeats(
@@ -78,9 +78,9 @@ export class SeatReservations {
     for (let i = 0; i < seatingLayout.length; i++) {
       // the first and last aisles in the seating layout do not affect the maximum number of four-person families that can fit
       // so we start at index 1 and end at index length - 2
-      let j = 1;
+      let j = 0;
       let count = 0;
-      while (j <= seatingLayout[i].length - 2) {
+      while (j <= seatingLayout[i].length - 1) {
         // when the current seat is available, add 1 to count and move to the next seat
         if (seatingLayout[i][j] == 0) {
           count++;
@@ -89,13 +89,8 @@ export class SeatReservations {
           // we only need 2 available seats on each side so the count is set to 2 and we move to the next seat.
           // if the count is less than 2 than there is no potential for a match. we reset count and move to the next seat
         } else if (seatingLayout[i][j] == 1) {
-          if (count == 2 || count == 3) {
-            count = 2;
-            j++;
-          } else {
-            count = 0;
-            j++;
-          }
+          count = 0;
+          j++;
           // when the current seat is reserved, reset the count and move to the next seat
         } else if (seatingLayout[i][j] == 2) {
           count = 0;
@@ -103,22 +98,20 @@ export class SeatReservations {
         }
 
         // we found a match, add one to the availability counter and reset the count
-        if (count == 4) {
+        if (count == 3) {
           count = 0;
-          fourFamilyAvailability++;
+          familyAvailability++;
         }
       }
     }
-    console.log(fourFamilyAvailability);
-    return fourFamilyAvailability;
+    console.log(familyAvailability);
+    return familyAvailability;
   }
 }
 
 const reservation = new SeatReservations();
 
 reservation.CalculateAvailability("");
-reservation.CalculateAvailability("5E 5F 4E 4F 3E 3F 2E 2F 1E 1F");
-reservation.CalculateAvailability("4J 3J 2J 1J 5J");
-reservation.CalculateAvailability("1B 1E 3A 3D 2H 4C 4E 5E");
-reservation.CalculateAvailability("1A 2F 1C 3E 4F 5H");
-reservation.CalculateAvailability("1A 3C 2B 1G 5A");
+reservation.CalculateAvailability("1A");
+reservation.CalculateAvailability("1A 1F");
+reservation.CalculateAvailability("1A 1E 1H");

@@ -15,3 +15,5 @@ Initial Planning
 - Construct a 2D array and fill it with 1s and 0s to act as aisles and available seats
 - Add reserved seats represented as 2s to the 2D array
 - Traverse the 2D array to calculate all four-person family matches
+
+
